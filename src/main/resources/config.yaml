@@ -1,0 +1,53 @@
+#Jwt Configuration
+jwt:
+  secret: ${JWT_SECRET:biSATc5TwmekoReHTZyJfrgSHSWJljvcC8fSSKYp8v5b5vBRwuKihPEaDFVSkat7PyPSeMjURb29fYiCZ0vMlO}
+  expiration: ${JWT_EXPIRATION:3600000} # 1 hour in milliseconds
+  prefix: ${JWT_PREFIX:Bearer}
+  header: ${JWT_HEADER:Authorization}
+  token-type: ${JWT_TOKEN_TYPE:}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:86400000}  # 1 day in milliseconds
+
+
+
+# OAuth2 Configuration
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: profile, email ,openid
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+  # AI Configuration
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+  # Mapper configuration
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+# Swagger Configuration
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui/index.html
+#    filter: true
+    tags-sorter: alpha
+    default-model-rendering: example
+    operations-sorter: method
+  show-actuator: false
+
+
+# Cloudinary Configuration
+cloudinary:
+  name: ${CLOUDINARY_NAME:dbvhtgbne}
+  api-key: ${CLOUDINARY_API_KEY:293817134219367}
+  api-secret: ${CLOUDINARY_API_SECRET:MGlEcaITiTgN-jCtsPVSuyOedaA}
