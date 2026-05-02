@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/documents")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('JOB_SEEKER')")
+@PreAuthorize("hasAuthority('JOBSEEKER')")
 public class DocumentController {
 
     private final DocumentService documentService;
