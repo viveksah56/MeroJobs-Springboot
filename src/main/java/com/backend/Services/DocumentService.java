@@ -11,15 +11,15 @@ public interface DocumentService {
 
     DocumentResponse uploadDocument(DocumentUploadRequest request);
 
-    DocumentResponse updateDocument(UUID jobSeekerId, UUID documentId, DocumentUploadRequest request);
+    DocumentResponse updateDocument(UUID documentId, DocumentUploadRequest request);
 
-    List<DocumentResponse> getAllDocuments(UUID jobSeekerId);
+    List<DocumentResponse> getAllDocuments();
 
-    List<DocumentResponse> getDocumentsByType(UUID jobSeekerId, DocumentType documentType);
+    List<DocumentResponse> getDocumentsByType(DocumentType documentType);
 
-    DocumentResponse getDefaultDocument(UUID jobSeekerId, DocumentType documentType);
+    DocumentResponse getDefaultDocument(DocumentType documentType);
 
-    DocumentResponse setDefaultDocument(UUID jobSeekerId, UUID documentId);
+    DocumentResponse setDefaultDocument(UUID documentId);
 
-    void deleteDocument(UUID jobSeekerId, UUID documentId);
+    void deleteDocument(UUID documentId);
 }

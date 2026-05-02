@@ -15,19 +15,22 @@ import java.util.UUID;
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, UUID> {
 
-    List<Document> findByJobSeeker_UserId(UUID jobSeekerId);
+    List<Document> findAllByJobSeekerUserIdAndDeletedFalse(UUID jobSeekerId);
 
-    List<Document> findByJobSeeker_UserIdAndDocumentType(UUID jobSeekerId, DocumentType documentType);
+    List<Document> findAllByJobSeekerUserIdAndDocumentTypeAndDeletedFalse(UUID jobSeekerId, DocumentType documentType);
 
-    Optional<Document> findByDocumentIdAndJobSeeker_UserId(UUID documentId, UUID jobSeekerId);
+    Optional<Document> findByDocumentIdAndDeletedFalse(UUID documentId);
 
-    Optional<Document> findByJobSeeker_UserIdAndIsDefaultTrueAndDocumentType(UUID jobSeekerId, DocumentType documentType);
-
-    boolean existsByJobSeeker_UserIdAndDocumentTypeAndIsDefaultTrue(UUID jobSeekerId, DocumentType documentType);
+    Optional<Document> findByJobSeekerUserIdAndDocumentTypeAndIsDefaultTrueAndDeletedFalse(UUID jobSeekerId, DocumentType documentType);
 
     @Modifying
-    @Query("UPDATE Document d SET d.isDefault = false " +
-            "WHERE d.jobSeeker.userId = :jobSeekerId AND d.documentType = :documentType")
-    void clearDefaultByJobSeekerAndType(@Param("jobSeekerId") UUID jobSeekerId,
-                                        @Param("documentType") DocumentType documentType);
+    @Query("""
+            UPDATE Document d
+            SET d.isDefault = false
+            WHERE d.jobSeeker.userId = :jobSeekerId
+            AND d.documentType = :documentType
+            AND d.deleted = false
+            """)
+    void clearDefaultByType(@Param("jobSeekerId") UUID jobSeekerId,
+                            @Param("documentType") DocumentType documentType);
 }
