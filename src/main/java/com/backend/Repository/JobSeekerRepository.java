@@ -2,23 +2,25 @@ package com.backend.Repository;
 
 import com.backend.Entity.JobSeeker;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
 public interface JobSeekerRepository extends JpaRepository<JobSeeker, UUID> {
-    Optional<JobSeeker> findByEmail(String email);
-    Optional<JobSeeker> findByUserId(UUID userId);
-
-    Optional<JobSeeker> findByEmailAndDeletedFalse(String email);
-
-    Optional<JobSeeker> findByUserIdAndDeletedFalse(UUID userId);
 
     boolean existsByEmail(String email);
 
+    Optional<JobSeeker> findByEmail(String email);
 
+    Optional<JobSeeker> findByEmailAndDeletedFalse(String email);
 
+    Page<JobSeeker> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            String firstName, String lastName, String email, Pageable pageable);
+
+    Page<JobSeeker> findBySkills_SkillId(UUID skillId, Pageable pageable);
+
+    Page<JobSeeker> findBySkills_SkillIdAndFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(
+            UUID skillId, String firstName, String lastName, Pageable pageable);
 }

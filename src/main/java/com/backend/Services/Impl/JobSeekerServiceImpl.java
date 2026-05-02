@@ -168,7 +168,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
     private UUID getCurrentJobSeekerId() {
         String email = authHelper.getCurrentEmail();
-        return jobSeekerRepository.findByEmail(email)
+        return jobSeekerRepository.findByEmailAndDeletedFalse(email)
                 .map(JobSeeker::getUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job seeker not found with email: " + email));
     }

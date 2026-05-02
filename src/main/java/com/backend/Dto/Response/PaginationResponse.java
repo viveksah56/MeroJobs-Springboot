@@ -1,5 +1,7 @@
 package com.backend.Dto.Response;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public record PaginationResponse<T>(
@@ -17,6 +19,23 @@ public record PaginationResponse<T>(
         if (total < 0) throw new IllegalArgumentException("Total count must be >= 0");
     }
 
+    public static <T> PaginationResponse<T> of(Page<T> page) {
+        String sortBy = page.getSort().isSorted()
+                ? page.getSort().iterator().next().getProperty()
+                : "createdAt";
 
+        String sortDir = page.getSort().isSorted()
+                ? page.getSort().iterator().next().getDirection().name().toLowerCase()
+                : "desc";
 
+        return new PaginationResponse<>(
+                page.getContent(),
+                page.getNumber() + 1,
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                sortBy,
+                sortDir
+        );
+    }
 }
