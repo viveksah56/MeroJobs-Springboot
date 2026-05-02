@@ -5,13 +5,13 @@ import com.backend.Dto.Request.PaginationRequest;
 import com.backend.Dto.Response.JobSeekerResponse;
 import com.backend.Dto.Response.PaginationResponse;
 import com.backend.Entity.JobSeeker;
+import com.backend.Entity.Role;
 import com.backend.Entity.Skill;
+import com.backend.Enum.AccountStatus;
+import com.backend.Enum.RoleType;
 import com.backend.Exception.ResourceNotFoundException;
 import com.backend.Mapper.JobSeekerMapper;
-import com.backend.Repository.JobApplicationRepository;
-import com.backend.Repository.JobSeekerRepository;
-import com.backend.Repository.SavedJobRepository;
-import com.backend.Repository.SkillRepository;
+import com.backend.Repository.*;
 import com.backend.Services.JobSeekerService;
 import com.backend.Util.AuthHelper;
 import com.backend.Util.PageRequestBuilder;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -37,6 +38,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     private final JobSeekerMapper jobSeekerMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthHelper authHelper;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -49,6 +51,8 @@ public class JobSeekerServiceImpl implements JobSeekerService {
         if (skills.size() != request.skillIds().size()) {
             throw new ResourceNotFoundException("One or more skills not found");
         }
+        Role jobSeekerRole = roleRepository.findByName(RoleType.JOBSEEKER)
+                .orElseThrow(() -> new ResourceNotFoundException("Role JOBSEEKER not found"));
 
         JobSeeker jobSeeker = JobSeeker.builder()
                 .firstName(request.firstName())
@@ -57,11 +61,13 @@ public class JobSeekerServiceImpl implements JobSeekerService {
                 .password(passwordEncoder.encode(request.password()))
                 .phone(request.phone())
                 .bio(request.bio())
+                .status(AccountStatus.ACTIVE)
                 .currentLocation(request.currentLocation())
                 .educationLevel(request.educationLevel())
                 .experienceLevel(request.experienceLevel())
                 .preferredJobType(request.preferredJobType())
                 .skills(skills)
+                .roles(Set.of(jobSeekerRole))
                 .build();
 
         log.info("Creating job seeker with email: {}", request.email());
@@ -91,7 +97,8 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     @Override
     @Transactional(readOnly = true)
     public JobSeekerResponse getJobSeekerById(UUID jobSeekerId) {
-        return jobSeekerRepository.findById(jobSeekerId)
+        log.info("Getting job seeker with id: {}", jobSeekerId);
+        return jobSeekerRepository.findByUserId(jobSeekerId)
                 .map(jobSeekerMapper::toJobSeekerResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Job seeker not found with id: " + jobSeekerId));
     }
@@ -168,6 +175,7 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
     private UUID getCurrentJobSeekerId() {
         String email = authHelper.getCurrentEmail();
+        log.warn("Getting current job seeker id for email: {}", email);
         return jobSeekerRepository.findByEmailAndDeletedFalse(email)
                 .map(JobSeeker::getUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job seeker not found with email: " + email));

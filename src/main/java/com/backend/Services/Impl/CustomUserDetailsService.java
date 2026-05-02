@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Set<SimpleGrantedAuthority> authorities = user.getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
                 .collect(Collectors.toSet());
 
         log.info("User '{}' loaded with roles: {}", email, authorities);
