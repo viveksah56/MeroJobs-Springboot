@@ -29,7 +29,8 @@ public class JobSeekerController {
             @Valid @RequestBody JobSeekerRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(jobSeekerService.createJobSeeker(request), "Job seeker created successfully"));
+                .body(ApiResponse.success(jobSeekerService.createJobSeeker(request),
+                        "Job seeker created successfully"));
     }
 
     @PutMapping("/{jobSeekerId}")

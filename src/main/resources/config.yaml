@@ -30,6 +30,22 @@ spring:
   jackson:
     mapper:
       accept-case-insensitive-enums: true
+
+  # Emails Configuration
+  mail:
+    default-encoding: UTF-8
+    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USERNAME:e207c4545c36ff}
+    password: ${MAIL_PASSWORD:d29e312840503b}
+    protocol: ${MAIL_PROTOCOL:smtp}
+    properties:
+      mail:
+        smtp:
+        auth: true
+        starttls:
+          enable: true
+
 # Swagger Configuration
 
 springdoc:
@@ -39,7 +55,7 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui/index.html
-#    filter: true
+    #    filter: true
     tags-sorter: alpha
     default-model-rendering: example
     operations-sorter: method
@@ -51,3 +67,6 @@ cloudinary:
   name: ${CLOUDINARY_NAME:dbvhtgbne}
   api-key: ${CLOUDINARY_API_KEY:293817134219367}
   api-secret: ${CLOUDINARY_API_SECRET:MGlEcaITiTgN-jCtsPVSuyOedaA}
+
+
+

@@ -61,6 +61,9 @@ public abstract class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserDevice> devices = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications;
+
     public void addDevice(UserDevice device) {
         devices.add(device);
         device.setUser(this);

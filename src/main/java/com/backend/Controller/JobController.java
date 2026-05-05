@@ -31,7 +31,7 @@ public class JobController {
     private final JobService jobService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ApiResponse<JobResponse>> createJob(
             @Valid @RequestBody JobRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -39,7 +39,7 @@ public class JobController {
     }
 
     @PutMapping("/{jobId}")
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ApiResponse<JobResponse>> updateJob(
             @PathVariable UUID jobId,
             @Valid @RequestBody JobRequest request) {
@@ -76,7 +76,7 @@ public class JobController {
     }
 
     @GetMapping("/my-jobs")
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<ApiResponse<PaginationResponse<JobResponse>>> getMyJobs(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -89,7 +89,7 @@ public class JobController {
     }
 
     @PostMapping(value = "/apply", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAuthority('JOB_SEEKER')")
+    @PreAuthorize("hasAuthority('JOBSEEKER')")
     public ResponseEntity<ApiResponse<JobApplicationResponse>> applyToJob(
             @Valid @ModelAttribute JobApplicationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)

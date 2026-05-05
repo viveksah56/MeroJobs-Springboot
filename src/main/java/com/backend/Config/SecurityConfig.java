@@ -31,11 +31,17 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] PUBLIC_URLS = {
-            "/api/v1/auth/**",
-            "/api/v1/job-seekers",
+            "/auth/**",
+            "/job-seekers",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/login",
+            "/skills",
+            "/employees/**",
+            "/jobs/**",
+            "/users/**",
+            "/error" // ✅ ADD THIS
     };
 
     @Bean

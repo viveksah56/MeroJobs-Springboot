@@ -28,7 +28,7 @@ public class RefreshToken extends BaseEntity {
     private UUID refreshTokenId;
 
 
-    @Column(nullable = false, unique = true, columnDefinition = "TEXT" ,length = 255)
+    @Column(nullable = false, unique = true, length = 512)
     private String token;
 
 
