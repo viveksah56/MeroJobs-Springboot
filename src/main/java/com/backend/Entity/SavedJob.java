@@ -30,5 +30,5 @@ public class SavedJob extends BaseEntity {
 
     private boolean bookmarked;
 
-    private Instant createdAt;
+
 }

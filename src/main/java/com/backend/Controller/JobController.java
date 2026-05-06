@@ -59,7 +59,7 @@ public class JobController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<PaginationResponse<JobResponse>>> searchJobs(
+    public ResponseEntity<ApiResponse<PaginationResponse<JobResponse>>> searchActiveJobs(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) JobType jobType,
             @RequestParam(required = false) WorkLocationType workLocationType,
@@ -100,7 +100,7 @@ public class JobController {
     }
 
     @GetMapping("/admin/all-jobs")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('JOBSEEKER')" )
     public ResponseEntity<ApiResponse<PaginationResponse<JobResponse>>> getAllJobsAdmin(
             @RequestParam(defaultValue = "1")          int page,
             @RequestParam(defaultValue = "10")         int size,
