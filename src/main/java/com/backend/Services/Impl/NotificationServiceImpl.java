@@ -33,7 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationMapper notificationMapper;
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     @EventListener
@@ -41,12 +41,8 @@ public class NotificationServiceImpl implements NotificationService {
     public void send(NotificationEvent event) {
         Notification notification = save(event, NotificationChannel.WEBSOCKET);
         NotificationResponse response = notificationMapper.toResponse(notification);
-        pushToWebSocket(event.getRecipientId(), response);
-    }
-
-    private void pushToWebSocket(UUID userId, NotificationResponse response) {
         messagingTemplate.convertAndSendToUser(
-                userId.toString(),
+                event.getRecipientId().toString(),
                 "/queue/notifications",
                 response
         );
@@ -75,16 +71,16 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional(readOnly = true)
     public PaginationResponse<NotificationResponse> getAll(UUID userId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Notification> notificationPage = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId, pageable);
-        return PaginationResponse.of(notificationPage.map(notificationMapper::toResponse));
+        Page<Notification> result = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId, pageable);
+        return PaginationResponse.of(result.map(notificationMapper::toResponse));
     }
 
     @Override
     @Transactional(readOnly = true)
     public PaginationResponse<NotificationResponse> getUnread(UUID userId, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Notification> notificationPage = notificationRepository.findByUser_UserIdAndReadFalseOrderByCreatedAtDesc(userId, pageable);
-        return PaginationResponse.of(notificationPage.map(notificationMapper::toResponse));
+        Page<Notification> result = notificationRepository.findByUser_UserIdAndReadFalseOrderByCreatedAtDesc(userId, pageable);
+        return PaginationResponse.of(result.map(notificationMapper::toResponse));
     }
 
     @Override
