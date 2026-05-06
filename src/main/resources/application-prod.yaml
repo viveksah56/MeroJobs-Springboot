@@ -1,0 +1,7 @@
+# Database Configuration For Railway
+spring:
+  datasource:
+    url: ${DB_URL:mysql.railway.internal}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:KajlkYjoDykesZzVhrHTLaUykakFmFys}
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}

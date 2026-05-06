@@ -45,6 +45,9 @@ spring:
         auth: true
         starttls:
           enable: true
+  autoconfigure:
+    exclude:
+
 
 # Swagger Configuration
 
@@ -70,3 +73,4 @@ cloudinary:
 
 
 
+# AutoConfiguration
