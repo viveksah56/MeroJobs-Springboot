@@ -33,7 +33,7 @@ public class SwaggerConfig {
 
     private Info buildInfo() {
         return new Info()
-                .title("Expense Tracker API")
+                .title("Mero Jobs API")
                 .version("1.0.0")
                 .description("API documentation for Expense Tracker")
                 .contact(new Contact()
